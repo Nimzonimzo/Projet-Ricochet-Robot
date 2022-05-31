@@ -1,14 +1,111 @@
 package com.example.projetricochetrobot;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+//import a faire
 
 public class HelloController {
-    @FXML
-    private Label welcomeText;
+
+    public final int taille_Tuile = 40;
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+    public GridPane plateauDeJeu;
+
+    @FXML
+    private Label statusLabel;
+
+    // "initialize()" est appelé par JavaFX à l'affichage de la fenêtre
+
+    @FXML
+    public void miseEnPlace() {
+
+        messageErreur("Ricochet Robots");
+        // Construction du plateau
+        Image tuile = new Image("case.png", taille_Tuile, taille_Tuile, false, true );
+        //"tuile.png" doit être placé à la racine de "resources/" (sinon c'est la cata)
+
+        for (int colonne = 0; colonne < Game.taille; colonne ++) {
+            for (int ligne = 0; ligne < Game.taille; ligne ++) {
+                ImageView tuileLambda = new ImageView(tuile);
+                final int lambdaColonne = colonne;
+                final int lambdaLigne = ligne;
+
+                tuileLambda.setOnMouseClicked(event -> {
+                    String status = Game.toto.processSelectTile
+                            (lambdaColonne, lambdaLigne);
+                    if ( "mouvement".equals(status)) {
+                        majMouvementRobot();
+                    } else if (status != null) {
+                        messageErreur(status);
+                    }
+                });
+                plateauDeJeu.add(tuileLambda, colonne, ligne);
+            }
+        }
+
+        // Ajout des pièces
+        ajoutRobot(Rouge);
+        ajoutRobot(Vert);
+        ajoutRobot(Bleu);
+        ajoutRobot(Jaune);
+
+        plateauDeJeu.add(new ImageView( new Image( Game.toto.getTarget().getCouleur() + "objectif.png", taille_Tuile, taille_Tuile, false, true
+                )),
+                Game.toto.getTarget().getColonne(),Game.toto.getTarget().getLigne()
+        );
+
+
+        // "Binding JFX" - Synchronisation du "Label" avec l'état du jeu
+        statusLabel.textProperty().bind(Game.toto.ajcf);
     }
+
+    // Affiche une boite de dialogue construite avec "SceneBuilder"
+    public void visionJoueur(ActionEvent actionEvent) throws IOException{
+        if (Game.toto.getStatus() == Game.Status.choiJoueur) {
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("vueJoueur.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+        }
+    }
+
+
+    private void ajoutRobot(Jeton.Couleur couleur) {
+        Jeton robot = Game.toto.getRobots().get(couleur);
+        ImageView robotLambda = new ImageView(new Image(couleur.nom() + "robot.pnj", taille_Tuile, taille_Tuile, false, true ));
+        robotLambda.setOnMouseClicked(event -> Game.toto.choixRobot(couleur));
+
+        plateauDeJeu.add(robotLambda, robot.getColonne(),robot.getLigne());
+        //Association avec le robot stocké
+        robot.setLambda(robotLambda);
+    }
+
+
+    private void majMouvementRobot() {
+        Jeton robot = Game.toto.getRobotPris();
+        GridPane.setConstraints(robot.getLambda(), robot.getColonne(), robot.getLigne());
+    }
+
+    private void messageErreur(String message) {
+        Alert debutMessage = new Alert(Alert.AlertType.INFORMATION, message);
+        debutMessage.setHeaderText(null);
+        debutMessage.setGraphic(null);
+        debutMessage.showAndWait();
+    }
+
+
+
 }
