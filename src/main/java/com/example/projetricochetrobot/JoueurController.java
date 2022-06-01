@@ -20,7 +20,7 @@ public class JoueurController {
     public void confirmer(ActionEvent actionEvent) {
         if ((nomTextField.getText() != null) && (! nomTextField.getText().isBlank())
         ){
-            Game.toto.choixJoueur();
+            Game.toto.choixDuJoueur();
             // Fermeture de la boite de dialogue
             Node node = (Node) actionEvent.getSource();
             Stage stage = (Stage) node.getScene().getWindow();

@@ -2,6 +2,9 @@ package com.example.projetricochetrobot;
 
 //import
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -23,7 +26,7 @@ public class Game {
      public static final int taille = 16;
 
     private Game () {
-        board = new Tuile[taille][taille];
+        board = new Case[taille][taille];
         robots = new HashMap<>();
         robots.put(rouge, new Jeton(rouge));
         robots.put(vert, new Jeton(vert));
@@ -37,14 +40,14 @@ public class Game {
 
     // * Gestion des événements du jeu
 
-    public void processSelectPlayer() {
+    public void choixDuJoueur() {
         if (this.status == choixDuJoueur) {
             // Action suivante attendue : choisir la case cible
             setStatus(choixDuRobot);
         }
     }
 
-    public void processSelectRobot(Jeton.Couleur couleur) {
+    public void choixDuRobot(Jeton.Couleur couleur) {
         if (this.status == choixDuRobot) {
             this.selectedRobot = this.robots.get(couleur);
             // Action suivante attendue : choisir la case cible
@@ -52,7 +55,7 @@ public class Game {
         }
     }
 
-    public String processSelectTile(int colonne, int ligne) {
+    public String choixDeLaTuile(int colonne, int ligne) {
         if (this.status == choixDeLaTuile) {
             if (
                     (this.selectedRobot.getColonne() != colonne) && (this.selectedRobot.getLigne() != ligne)
@@ -70,12 +73,14 @@ public class Game {
     }
 
 
+
+
     // * Etat courant du jeu
 
     public enum Status {
         choixDuJoueur("Cliquez sur le bouton [Jouer]"),
         choixDuRobot("Cliquez sur le robot à déplacer"),
-        CHOOSE_TILE("Cliquez sur la case destination");
+        choixDeLaTuile("Cliquez sur la case destination");
         Status(String toolTip) { this.toolTip = toolTip; }
         private String toolTip;
         public String getToolTip() { return this.toolTip; }
@@ -86,8 +91,8 @@ public class Game {
 
         // Mise à jour du libellé d'état sur l'affichage
         StringBuilder statusMessage = new StringBuilder();
-        if (playerNameProperty.get() != null) {
-            statusMessage.append(playerNameProperty.get());
+        if (joueurNom.get() != null) {
+            statusMessage.append(joueurNom.get());
             statusMessage.append(" : ");
         }
         statusMessage.append( status.getToolTip() );
@@ -98,7 +103,7 @@ public class Game {
     public StringProperty ajcf = new SimpleStringProperty();
 
     // "Binding JFX" - Synchronisation avec "PlayerController.name"
-    public StringProperty playerNameProperty = new SimpleStringProperty();
+    public StringProperty joueurNom = new SimpleStringProperty();
 
     private Jeton selectedRobot;
     public Jeton getSelectedRobot() { return this.selectedRobot; }
@@ -106,7 +111,7 @@ public class Game {
     // * ---
 
     // Le plateau de taille x taille cases
-    private Tuile[][] board;
+    private Case[][] board;
 
     // Les 4 robots
     private Map<Jeton.Couleur, Jeton> robots;

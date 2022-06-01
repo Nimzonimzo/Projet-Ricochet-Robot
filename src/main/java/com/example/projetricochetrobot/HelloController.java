@@ -13,6 +13,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static com.example.projetricochetrobot.Jeton.Couleur.*;
 //import a faire
 
 public class HelloController {
@@ -33,7 +35,7 @@ public class HelloController {
         messageErreur("Ricochet Robots");
         // Construction du plateau
         Image tuile = new Image("case.png", taille_Tuile, taille_Tuile, false, true );
-        //"tuile.png" doit être placé à la racine de "resources/" (sinon c'est la cata)
+        //"case.png" doit être placé à la racine de "resources/" (sinon c'est la cata)
 
         for (int colonne = 0; colonne < Game.taille; colonne ++) {
             for (int ligne = 0; ligne < Game.taille; ligne ++) {
@@ -42,8 +44,7 @@ public class HelloController {
                 final int lambdaLigne = ligne;
 
                 tuileLambda.setOnMouseClicked(event -> {
-                    String status = Game.toto.processSelectTile
-                            (lambdaColonne, lambdaLigne);
+                    String status = Game.toto.choixDeLaTuile(lambdaColonne, lambdaLigne);
                     if ( "mouvement".equals(status)) {
                         majMouvementRobot();
                     } else if (status != null) {
@@ -55,10 +56,10 @@ public class HelloController {
         }
 
         // Ajout des pièces
-        ajoutRobot(Rouge);
-        ajoutRobot(Vert);
-        ajoutRobot(Bleu);
-        ajoutRobot(Jaune);
+        ajoutRobot(rouge);
+        ajoutRobot(vert);
+        ajoutRobot(bleu);
+        ajoutRobot(jaune);
 
         plateauDeJeu.add(new ImageView( new Image( Game.toto.getTarget().getCouleur() + "objectif.png", taille_Tuile, taille_Tuile, false, true
                 )),
@@ -72,7 +73,7 @@ public class HelloController {
 
     // Affiche une boite de dialogue construite avec "SceneBuilder"
     public void visionJoueur(ActionEvent actionEvent) throws IOException{
-        if (Game.toto.getStatus() == Game.Status.choiJoueur) {
+        if (Game.toto.getStatus() == Game.Status.choixDuJoueur) {
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("vueJoueur.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
@@ -85,8 +86,8 @@ public class HelloController {
 
     private void ajoutRobot(Jeton.Couleur couleur) {
         Jeton robot = Game.toto.getRobots().get(couleur);
-        ImageView robotLambda = new ImageView(new Image(couleur.nom() + "robot.pnj", taille_Tuile, taille_Tuile, false, true ));
-        robotLambda.setOnMouseClicked(event -> Game.toto.choixRobot(couleur));
+        ImageView robotLambda = new ImageView(new Image(couleur.name() + "robot.pnj", taille_Tuile, taille_Tuile, false, true ));
+        robotLambda.setOnMouseClicked(event -> Game.toto.choixDuRobot(couleur));
 
         plateauDeJeu.add(robotLambda, robot.getColonne(),robot.getLigne());
         //Association avec le robot stocké
@@ -95,7 +96,7 @@ public class HelloController {
 
 
     private void majMouvementRobot() {
-        Jeton robot = Game.toto.getRobotPris();
+        Jeton robot = Game.toto.getSelectedRobot();
         GridPane.setConstraints(robot.getLambda(), robot.getColonne(), robot.getLigne());
     }
 
