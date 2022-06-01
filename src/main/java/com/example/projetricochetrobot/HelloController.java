@@ -61,8 +61,7 @@ public class HelloController {
         ajoutRobot(bleu);
         ajoutRobot(jaune);
 
-        plateauDeJeu.add(new ImageView( new Image( "target-" + Game.toto.getTarget().getCouleur() + ".png", taille_Tuile, taille_Tuile, false, true
-                )),
+        plateauDeJeu.add(new ImageView( new Image( "target-" + Game.toto.getTarget().getCouleur() + ".png", taille_Tuile, taille_Tuile, false, true)),
                 Game.toto.getTarget().getColonne(),Game.toto.getTarget().getLigne()
         );
 
@@ -86,7 +85,7 @@ public class HelloController {
 
     private void ajoutRobot(Jeton.Couleur couleur) {
         Jeton robot = Game.toto.getRobots().get(couleur);
-        ImageView robotLambda = new ImageView(new Image("pion-" + couleur.name() + ".pnj", taille_Tuile, taille_Tuile, false, true ));
+        ImageView robotLambda = new ImageView(new Image("pion-" + couleur.name() + ".png", taille_Tuile, taille_Tuile, false, true ));
         robotLambda.setOnMouseClicked(event -> Game.toto.choixDuRobot(couleur));
 
         plateauDeJeu.add(robotLambda, robot.getColonne(),robot.getLigne());

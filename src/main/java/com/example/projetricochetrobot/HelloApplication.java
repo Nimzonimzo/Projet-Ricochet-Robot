@@ -13,7 +13,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         Game.start();
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 500, 500);
         stage.setTitle("Ricochets Robot TB");
         stage.setScene(scene);
         stage.show();
