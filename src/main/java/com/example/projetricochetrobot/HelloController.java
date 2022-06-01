@@ -61,7 +61,7 @@ public class HelloController {
         ajoutRobot(bleu);
         ajoutRobot(jaune);
 
-        plateauDeJeu.add(new ImageView( new Image( Game.toto.getTarget().getCouleur() + "objectif.png", taille_Tuile, taille_Tuile, false, true
+        plateauDeJeu.add(new ImageView( new Image( "target-" + Game.toto.getTarget().getCouleur() + ".png", taille_Tuile, taille_Tuile, false, true
                 )),
                 Game.toto.getTarget().getColonne(),Game.toto.getTarget().getLigne()
         );
@@ -74,7 +74,7 @@ public class HelloController {
     // Affiche une boite de dialogue construite avec "SceneBuilder"
     public void visionJoueur(ActionEvent actionEvent) throws IOException{
         if (Game.toto.getStatus() == Game.Status.choixDuJoueur) {
-            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("vueJoueur.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("joueur_view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -86,7 +86,7 @@ public class HelloController {
 
     private void ajoutRobot(Jeton.Couleur couleur) {
         Jeton robot = Game.toto.getRobots().get(couleur);
-        ImageView robotLambda = new ImageView(new Image(couleur.name() + "robot.pnj", taille_Tuile, taille_Tuile, false, true ));
+        ImageView robotLambda = new ImageView(new Image("pion-" + couleur.name() + ".pnj", taille_Tuile, taille_Tuile, false, true ));
         robotLambda.setOnMouseClicked(event -> Game.toto.choixDuRobot(couleur));
 
         plateauDeJeu.add(robotLambda, robot.getColonne(),robot.getLigne());
