@@ -14,7 +14,7 @@
             <children>
                 <VBox>
                     <children>
-                        <Button mnemonicParsing="false" onAction="#visionJoueur" prefWidth="1.0" text="Jouer">
+                        <Button mnemonicParsing="false" onAction="#visionJoueur" minWidth="70.0" text="Jouer">
                             <VBox.margin>
                                 <Insets bottom="100.0" left="700.0" top="300.0" />
                             </VBox.margin>
