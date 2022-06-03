@@ -1,8 +1,10 @@
-module com.example.projetricochetrobot {
+module isep.jfx {
     requires javafx.controls;
     requires javafx.fxml;
+    opens isep.jfx to javafx.fxml;
+    exports isep.jfx;
 
-
-    opens com.example.projetricochetrobot to javafx.fxml;
-    exports com.example.projetricochetrobot;
+    requires transitive javafx.base;
+    requires transitive javafx.graphics;
+    requires transitive java.desktop;
 }
